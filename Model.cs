@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
-public class BloggingContext : BloggingContext
+public class BloggingContext : DbContext
 {
 	public DbSet<Blog> Blogs { get; set; }
 	public DbSet<Post> Posts { get; set; }
@@ -13,13 +13,12 @@ public class BloggingContext : BloggingContext
 	{
 		var folder = Environment.SpecialFolder.LocalApplicationData;
 		var path = Environment.GetFolderPath(folder);
-		DbPath = System.IO.Path.Join(path, "blogging.db")
+		DbPath = System.IO.Path.Join(path, "blogging.db");
 
 	}
 
-	protected override void OnConfiguring(DbContextOptionBuilder options) => options.UseSqlite($"Data Source={Dbpath}");
-
-
+	protected override void OnConfiguring(DbContextOptionsBuilder options)
+		=> options.UseSqlite($"Data Source={DbPath}");
 }
 
 public class Blog
@@ -36,6 +35,6 @@ public class Post
 	public string Title { get; set; }
 	public string Content { get; set; }
 
-	public int BlogId { get; set }
+	public int BlogId { get; set; }
 	public Blog Blog { get; set; }
 }
